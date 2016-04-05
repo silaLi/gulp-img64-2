@@ -1,14 +1,14 @@
 {
-  "name": "gulp-img64",
-  "version": "0.0.6",
-  "description": "Convert and replace image-files within your DOM/HTML to base64-encoded data.",
+  "name": "gulp-img64-2",
+  "version": "0.0.2",
+  "description": "this is an upgraded version of gulp-img64",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/247even/gulp-img64"
+    "url": "https://github.com/silaLi/gulp-img64-2"
   },
   "keywords": [
     "gulpplugin", "endoding", "base64", "image", "html", "DOM"
@@ -32,7 +32,7 @@
   },
   "readmeFilename": "README.md",
   "bugs": {
-    "url": "https://github.com/247even/gulp-img64/issues"
+    "url": "https://github.com/silaLi/gulp-img64-2/issues"
   },
   "homepage": "https://github.com/247even/gulp-img64",
   "_id": "gulp-img64@0.0.1",
