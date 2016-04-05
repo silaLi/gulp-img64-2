@@ -17,6 +17,20 @@ gulp.task('default', function () {
 });
 ```
 
+##### gulpfile.js option
+
+```js
+var gulp = require('gulp');
+var img64 = require('gulp-img64');
+
+gulp.task('default', function () {
+	gulp.src('index.html')
+		.pipe(img64({
+			maxWeightResource: 4000
+		}))
+		.pipe(gulp.dest('path'));
+});
+```
 
 ##### index.html // Before...
 
