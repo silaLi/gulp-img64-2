@@ -11,15 +11,15 @@ module.exports = function(opt) {
 
 	// create a stream through which each file will pass
 	return through.obj(function(file, enc, callback) {
-
+		var self = this;
 		if (file.isNull()) {
-			this.push(file);
+			self.push(file);
 			// do nothing if no contents
 			return callback();
 		}
 
 		if (file.isStream()) {
-			this.emit('error', new gutil.PluginError('gulp-img64', 'Streaming not supported'));
+			self.emit('error', new gutil.PluginError('gulp-img64', 'Streaming not supported'));
 			return callback();
 		}
 
@@ -34,14 +34,14 @@ module.exports = function(opt) {
 						// locate the file in the system
 						var exist = fs.existsSync(spath)
 						if (!exist) {
-							console.log("Can't find " + spath)
-							return;
+							self.emit('error', new gutil.PluginError('gulp-img64', "Can't find " + spath));
+							return callback();
 						}
 						var mtype = mime.lookup(spath);
 						if (mtype != 'application/octet-stream') {
 							var states = fs.statSync(spath);
 							if (states.size > opt.maxWeightResource) {
-								return;
+								return callback();
 							}
 							var sfile = fs.readFileSync(spath);
 							var simg64 = new Buffer(sfile).toString('base64');
