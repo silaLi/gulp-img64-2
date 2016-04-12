@@ -7,7 +7,10 @@ var path = require('path');
 var mime = require('mime');
 
 module.exports = function(opt) {
+	opt = opt || {};
 	opt.maxWeightResource = opt.maxWeightResource || 10240;
+	opt.maxAllWeightResource = opt.maxAllWeightResource || -1;
+	opt.startWeightResource = opt.startWeightResource || 0;
 
 	// create a stream through which each file will pass
 	return through.obj(function(file, enc, callback) {
@@ -34,15 +37,20 @@ module.exports = function(opt) {
 						// locate the file in the system
 						var exist = fs.existsSync(spath)
 						if (!exist) {
-							self.emit('error', new gutil.PluginError('gulp-img64', "Can't find " + spath));
-							return callback();
+							console.error("Can't find " + spath);
+							return;
 						}
 						var mtype = mime.lookup(spath);
 						if (mtype != 'application/octet-stream') {
 							var states = fs.statSync(spath);
-							if (states.size > opt.maxWeightResource) {
-								return callback();
+							var fileSize = states.size;
+							if (fileSize > opt.maxWeightResource) {
+								return;
 							}
+							if (opt.maxAllWeightResource > -1 && opt.startWeightResource + fileSize > opt.maxAllWeightResource) {
+								return;
+							}
+							opt.startWeightResource += fileSize;
 							var sfile = fs.readFileSync(spath);
 							var simg64 = new Buffer(sfile).toString('base64');
 							this.attr('src', 'data:' + mtype + ';base64,' + simg64);
