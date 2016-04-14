@@ -137,8 +137,7 @@ describe('gulp-img64', function() {
 			var stream = img64({
 				maxWeightResource: 10400,
 				maxAllWeightResource: 12200,
-				isMoreImg: false,
-				test: true
+				isMoreImg: true
 			});
 
 			stream.on('data', function(newFile) {

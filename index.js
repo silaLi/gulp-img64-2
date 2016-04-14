@@ -12,7 +12,6 @@ module.exports = function(opt) {
 	opt.maxAllWeightResource = opt.maxAllWeightResource || -1;
 	opt.startWeightResource = opt.startWeightResource || 0;
 	opt.isMoreImg = opt.isMoreImg || false;
-	opt.test = opt.test || false;
 
 	// create a stream through which each file will pass
 	return through.obj(function(file, enc, callback) {
@@ -32,7 +31,7 @@ module.exports = function(opt) {
 			var $ = cheerio.load(String(file.contents));
 			var files = [];
 			var imgs = $('img');
-			for(var i = 0, len = imgs.length; i < len; i++){
+			for (var i = 0, len = imgs.length; i < len; i++) {
 				var $img = $(imgs[i]);
 				if ($img.attr('src')) {
 					var ssrc = $img.attr('src');
@@ -57,11 +56,12 @@ module.exports = function(opt) {
 					}
 				}
 			}
-			files.sort(function(a, b){
-				return a.fileSize - b.fileSize;
-			})
-
-			for(var i = 0; i < files.length; i++){
+			if (opt.isMoreImg) {
+				files.sort(function(a, b) {
+					return a.fileSize - b.fileSize;
+				})
+			}
+			for (var i = 0; i < files.length; i++) {
 				var thisFile = files[i];
 				if (thisFile.fileSize > opt.maxWeightResource) {
 					continue;
@@ -70,11 +70,11 @@ module.exports = function(opt) {
 					continue;
 				}
 				opt.startWeightResource += thisFile.fileSize;
-				var sfile = fs.readFileSync(spath);
+				var sfile = fs.readFileSync(thisFile.filePath);
 				var simg64 = new Buffer(sfile).toString('base64');
 				thisFile.el.attr('src', 'data:' + mtype + ';base64,' + simg64);
 			}
-			
+
 			var output = $.html();
 
 			file.contents = new Buffer(output);

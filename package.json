@@ -1,7 +1,7 @@
 {
   "name": "gulp-img64-2",
-  "version": "0.0.4",
-  "description": "this is an upgraded version of gulp-img64",
+  "version": "0.0.6",
+  "description": "this is an upgraded version of gulp-img64-2",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
@@ -19,8 +19,8 @@
     "DOM"
   ],
   "author": {
-    "name": "247even",
-    "url": "https://github.com/247even"
+    "name": "silali",
+    "url": "https://github.com/silali"
   },
   "license": "MIT",
   "dependencies": {
@@ -40,7 +40,7 @@
   "bugs": {
     "url": "https://github.com/silaLi/gulp-img64-2/issues"
   },
-  "homepage": "https://github.com/247even/gulp-img64",
-  "_id": "gulp-img64@0.0.1",
-  "_from": "gulp-img64@"
+  "homepage": "https://github.com/silaLi/gulp-img64-2",
+  "_id": "gulp-img64-2@0.0.1",
+  "_from": "gulp-img64-2@"
 }
