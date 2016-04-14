@@ -1,4 +1,4 @@
-# gulp-img64 [![Build Status](https://travis-ci.org/247even/gulp-img64.png)](https://travis-ci.org/247even/gulp-img64)
+# gulp-img64-2 
 
 Convert and replace image-files within your DOM/HTML to base64-encoded data.
 
@@ -8,7 +8,7 @@ Convert and replace image-files within your DOM/HTML to base64-encoded data.
 
 ```js
 var gulp = require('gulp');
-var img64 = require('gulp-img64');
+var img64 = require('gulp-img64-2');
 
 gulp.task('default', function () {
 	gulp.src('index.html')
@@ -22,7 +22,7 @@ gulp.task('default', function () {
 ```js
 // maxWeightResource: a img size must less than maxWeightResource
 var gulp = require('gulp');
-var img64 = require('gulp-img64');
+var img64 = require('gulp-img64-2');
 
 gulp.task('default', function () {
 	gulp.src('index.html')
@@ -37,7 +37,7 @@ gulp.task('default', function () {
 ```js
 // maxAllWeightResource: all the selected images size must less than maxAllWeightResource
 var gulp = require('gulp');
-var img64 = require('gulp-img64');
+var img64 = require('gulp-img64-2');
 
 gulp.task('default', function () {
 	gulp.src('index.html')
@@ -52,13 +52,30 @@ gulp.task('default', function () {
 ```js
 // startWeightResource: It must use with maxAllWeightResource, so all the selected images size must less than (maxAllWeightResource - startWeightResource)
 var gulp = require('gulp');
-var img64 = require('gulp-img64');
+var img64 = require('gulp-img64-2');
 
 gulp.task('default', function () {
 	gulp.src('index.html')
 		.pipe(img64({
 			startWeightResource: 1000,
 			maxAllWeightResource: 4000
+		}))
+		.pipe(gulp.dest('path'));
+});
+```
+
+###### isMoreImg : default false
+```js
+// isMoreImg: More images will be selected for use with smaller parameters maxAllWeightResource  
+var gulp = require('gulp');
+var img64 = require('gulp-img64-2');
+
+gulp.task('default', function () {
+	gulp.src('index.html')
+		.pipe(img64({
+			startWeightResource: 1000,
+			maxAllWeightResource: 4000,
+			isMoreImg: false
 		}))
 		.pipe(gulp.dest('path'));
 });
