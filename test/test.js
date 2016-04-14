@@ -124,5 +124,31 @@ describe('gulp-img64', function() {
 
 		});
 
+		it('should only replace a part of images in DOM with base64 data, when their size less than maxAllWeightResource with starting startWeightResource', function(done) {
+
+			var filename = path.join(__dirname, '/fixtures/input5.html');
+
+			var input = new gutil.File({
+				base: path.dirname(filename),
+				path: filename,
+				contents: new Buffer(fs.readFileSync(filename, 'utf8'))
+			});
+
+			var stream = img64({
+				maxWeightResource: 10400,
+				maxAllWeightResource: 12200,
+				isMoreImg: false,
+				test: true
+			});
+
+			stream.on('data', function(newFile) {
+				assert.equal(String(newFile.contents), fs.readFileSync(path.join(__dirname, '/fixtures/output5.html'), 'utf8'));
+				done();
+			});
+
+			stream.write(input);
+
+		});
+
 	});
 });

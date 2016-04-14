@@ -11,6 +11,8 @@ module.exports = function(opt) {
 	opt.maxWeightResource = opt.maxWeightResource || 10240;
 	opt.maxAllWeightResource = opt.maxAllWeightResource || -1;
 	opt.startWeightResource = opt.startWeightResource || 0;
+	opt.isMoreImg = opt.isMoreImg || false;
+	opt.test = opt.test || false;
 
 	// create a stream through which each file will pass
 	return through.obj(function(file, enc, callback) {
@@ -28,36 +30,51 @@ module.exports = function(opt) {
 
 		if (file.isBuffer()) {
 			var $ = cheerio.load(String(file.contents));
-			$('img').each(function() {
-				if (this.attr('src')) {
-					var ssrc = this.attr('src');
+			var files = [];
+			var imgs = $('img');
+			for(var i = 0, len = imgs.length; i < len; i++){
+				var $img = $(imgs[i]);
+				if ($img.attr('src')) {
+					var ssrc = $img.attr('src');
 					var isdata = ssrc.indexOf("data");
 					if (ssrc != "" && typeof ssrc != 'undefined' && isdata !== 0) {
 						var spath = path.join(file.base, ssrc);
 						// locate the file in the system
-						var exist = fs.existsSync(spath)
+						var exist = fs.existsSync(spath);
 						if (!exist) {
 							console.error("Can't find " + spath);
-							return;
+							continue;
 						}
 						var mtype = mime.lookup(spath);
 						if (mtype != 'application/octet-stream') {
 							var states = fs.statSync(spath);
-							var fileSize = states.size;
-							if (fileSize > opt.maxWeightResource) {
-								return;
-							}
-							if (opt.maxAllWeightResource > -1 && opt.startWeightResource + fileSize > opt.maxAllWeightResource) {
-								return;
-							}
-							opt.startWeightResource += fileSize;
-							var sfile = fs.readFileSync(spath);
-							var simg64 = new Buffer(sfile).toString('base64');
-							this.attr('src', 'data:' + mtype + ';base64,' + simg64);
+							files.push({
+								fileSize: states.size,
+								filePath: spath,
+								el: $img
+							});
 						}
 					}
 				}
-			});
+			}
+			files.sort(function(a, b){
+				return a.fileSize - b.fileSize;
+			})
+
+			for(var i = 0; i < files.length; i++){
+				var thisFile = files[i];
+				if (thisFile.fileSize > opt.maxWeightResource) {
+					continue;
+				}
+				if (opt.maxAllWeightResource > -1 && opt.startWeightResource + thisFile.fileSize > opt.maxAllWeightResource) {
+					continue;
+				}
+				opt.startWeightResource += thisFile.fileSize;
+				var sfile = fs.readFileSync(spath);
+				var simg64 = new Buffer(sfile).toString('base64');
+				thisFile.el.attr('src', 'data:' + mtype + ';base64,' + simg64);
+			}
+			
 			var output = $.html();
 
 			file.contents = new Buffer(output);
