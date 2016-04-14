@@ -75,7 +75,7 @@ gulp.task('default', function () {
 		.pipe(img64({
 			startWeightResource: 1000,
 			maxAllWeightResource: 4000,
-			isMoreImg: false
+			isMoreImg: true
 		}))
 		.pipe(gulp.dest('path'));
 });
