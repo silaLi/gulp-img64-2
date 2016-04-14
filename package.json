@@ -1,6 +1,6 @@
 {
   "name": "gulp-img64-2",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "this is an upgraded version of gulp-img64-2",
   "main": "index.js",
   "scripts": {
